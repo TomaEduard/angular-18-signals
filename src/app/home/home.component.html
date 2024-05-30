@@ -1,0 +1,81 @@
+<div class="courses-panel">
+
+  <h3>Plain counter: {{counter}}</h3>
+
+  <!--h3>Observable counter: {{counter$ | async}}</h3-->
+
+  <h3>Interval counter: {{intervalCounter()}}</h3>
+
+
+
+
+  <course-card>
+
+  </course-card>
+
+
+
+
+
+
+
+
+
+
+
+
+  <button class="btn" (click)="increment()">
+    Increment Plain Counter
+  </button>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <button class="btn" (click)="onAddCourse()">
+    Add Course
+  </button>
+
+  <mat-tab-group>
+
+    <mat-tab label="Beginners">
+      <courses-card-list
+        (courseUpdated)="onCourseUpdated($event)"
+        (courseDeleted)="onCourseDeleted($event)"
+        [courses]="beginnerCourses()" />
+    </mat-tab>
+
+    <mat-tab label="Advanced">
+      <courses-card-list
+        (courseUpdated)="onCourseUpdated($event)"
+        (courseDeleted)="onCourseDeleted($event)"
+       [courses]="advancedCourses()"/>
+    </mat-tab>
+
+  </mat-tab-group>
+
+</div>
