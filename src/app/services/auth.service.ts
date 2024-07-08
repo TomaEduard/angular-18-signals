@@ -13,13 +13,11 @@ const USER_STORAGE_KEY = 'user';
 export class AuthService {
 
   #userSignal = signal<User | null>(null);
-
   user = this.#userSignal.asReadonly();
 
   isLoggedIn = computed(() => !!this.user());
 
   http = inject(HttpClient);
-
   router = inject(Router);
 
   constructor() {

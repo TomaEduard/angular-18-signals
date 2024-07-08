@@ -32,7 +32,6 @@ export class EditCourseDialogComponent {
 
   category = signal<CourseCategory>("BEGINNER");
 
-
   form = this.fb.group({
     title: [''],
     longDescription: [''],
@@ -40,9 +39,7 @@ export class EditCourseDialogComponent {
   })
 
   constructor() {
-
     this.form.events.subscribe(console.log);
-
 
     this.form.patchValue({
       title: this.data?.course?.title,
@@ -56,13 +53,13 @@ export class EditCourseDialogComponent {
     })
   }
 
+
   onClose() {
     this.dialogRef.close();
   }
 
   async onSave() {
-    const courseProps =
-      this.form.value as Partial<Course>;
+    const courseProps = this.form.value as Partial<Course>;
     courseProps.category = this.category();
     if (this.data?.mode === "update") {
       await this.saveCourse(this.data?.course!.id, courseProps);
@@ -92,8 +89,6 @@ export class EditCourseDialogComponent {
       alert(`Failed to save the course.`);
     }
   }
-
-
 }
 
 export async function openEditCourseDialog(

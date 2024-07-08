@@ -1,28 +1,13 @@
-import {
-  afterNextRender,
-  ChangeDetectorRef,
-  Component,
-  computed,
-  effect,
-  EffectRef,
-  inject,
-  Injector, NgZone,
-  OnInit,
-  signal
-} from '@angular/core';
+import {Component, computed, effect, inject, OnInit, signal} from '@angular/core';
 import {CoursesService} from "../services/courses.service";
 import {Course, sortCoursesBySeqNo} from "../models/course.model";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {CoursesCardListComponent} from "../courses-card-list/courses-card-list.component";
 import {MatDialog} from "@angular/material/dialog";
 import {MessagesService} from "../messages/messages.service";
-import {catchError, from, interval, Observable, throwError} from "rxjs";
-import {toObservable, toSignal, outputToObservable, outputFromObservable} from "@angular/core/rxjs-interop";
-import {CoursesServiceWithFetch} from "../services/courses-fetch.service";
+import {interval} from "rxjs";
 import {openEditCourseDialog} from "../edit-course-dialog/edit-course-dialog.component";
-import {LoadingService} from "../loading/loading.service";
 import {AsyncPipe} from "@angular/common";
-import {CourseCardComponent} from "../course-card/course-card.component";
 
 @Component({
   selector: 'home',
@@ -32,7 +17,6 @@ import {CourseCardComponent} from "../course-card/course-card.component";
     MatTab,
     CoursesCardListComponent,
     AsyncPipe,
-    CourseCardComponent
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -48,30 +32,13 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     setInterval(() => {
       this.intervalCounter
-        .update(counter => counter + 1)
+      .update(counter => counter + 1)
     }, 1000);
   }
 
   increment() {
     this.counter++;
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   #courses = signal<Course[]>([]);
 
@@ -94,22 +61,20 @@ export class HomeComponent implements OnInit {
   messageService = inject(MessagesService);
 
   constructor() {
-
     effect(() => {
       console.log(`Beginner courses: `, this.beginnerCourses())
       console.log(`Advanced courses: `, this.advancedCourses())
     });
 
     this.loadCourses()
-      .then(() => console.log(`All courses loaded:`, this.#courses()));
+    .then(() => console.log(`All courses loaded:`, this.#courses()));
   }
 
   async loadCourses() {
     try {
       const courses = await this.coursesService.loadAllCourses();
       this.#courses.set(courses.sort(sortCoursesBySeqNo));
-    }
-    catch(err) {
+    } catch (err) {
       this.messageService.showMessage(
         `Error loading courses!`,
         "error"
@@ -133,8 +98,7 @@ export class HomeComponent implements OnInit {
       const newCourses = courses.filter(
         course => course.id !== courseId)
       this.#courses.set(newCourses);
-    }
-    catch (err) {
+    } catch (err) {
       console.error(err)
       alert(`Error deleting course.`)
     }
