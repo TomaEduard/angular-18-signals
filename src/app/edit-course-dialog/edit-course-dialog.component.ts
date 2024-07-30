@@ -48,7 +48,7 @@ export class EditCourseDialogComponent {
     });
     this.category.set(this.data?.course?.category ?? "BEGINNER");
     effect(() => {
-      console.log(`Course category bi-directional binding:
+      console.log(`🟢 Course category bi-directional binding:
       ${this.category()}`);
     })
   }
@@ -76,7 +76,6 @@ export class EditCourseDialogComponent {
       console.error(err);
       alert(`Error creating the course.`)
     }
-
   }
 
   async saveCourse(courseId: string, changes: Partial<Course>) {
@@ -89,6 +88,7 @@ export class EditCourseDialogComponent {
       alert(`Failed to save the course.`);
     }
   }
+
 }
 
 export async function openEditCourseDialog(

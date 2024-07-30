@@ -5,14 +5,12 @@ import {isUserAuthenticated} from "./guards/auth.guard";
 import {courseResolver} from "./course/resolvers/course.resolver";
 import {CourseComponent} from "./course/course.component";
 import {courseLessonsResolver} from "./course/resolvers/course-lessons.resolver";
-
+import {LessonsComponent} from "./lessons/lessons.component";
 
 export const routes: Routes = [
   {
     path: "lessons",
-    redirectTo: ({params, queryParams}) => {
-      return "/login"
-    }
+    component: LessonsComponent,
   },
   {
     path: "courses/:courseId",

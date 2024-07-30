@@ -6,27 +6,38 @@
 	
 	<h3>Interval counter: {{ intervalCounter() }}</h3>
 	
-	
 	<button class="btn" (click)="increment()">
 		Increment Plain Counter
 	</button>
 	
-	
 	<button class="btn" (click)="onAddCourse()">
 		Add Course
+	</button>
+	
+	<button class="btn" (click)="onToObservableExample()">
+		onToObservable
+	</button>
+	
+	<button class="btn" (click)="toSignalExample()">
+		toSignal
 	</button>
 	
 	<mat-tab-group>
 		
 		<mat-tab label="Beginners">
 			<courses-card-list
-				(courseUpdated)="onCourseUpdated($event)" (courseDeleted)="onCourseDeleted($event)" [courses]="beginnerCourses()"
+				#beginnersList
+				matTooltip="This is a list of beginner courses"
+				(courseUpdated)="onCourseUpdated($event)" (courseDeleted)="onCourseDeleted($event)"
+				[courses]="beginnerCourses()"
+				class="beginners"
 			/>
 		</mat-tab>
 		
 		<mat-tab label="Advanced">
 			<courses-card-list
-				(courseUpdated)="onCourseUpdated($event)" (courseDeleted)="onCourseDeleted($event)" [courses]="advancedCourses()"
+				#advancedList (courseUpdated)="onCourseUpdated($event)" (courseDeleted)="onCourseDeleted($event)"
+				[courses]="advancedCourses()"
 			/>
 		</mat-tab>
 	

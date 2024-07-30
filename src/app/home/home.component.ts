@@ -1,13 +1,15 @@
-import {Component, computed, effect, inject, OnInit, signal} from '@angular/core';
+import {Component, computed, effect, ElementRef, inject, Injector, OnInit, signal, viewChild} from '@angular/core';
 import {CoursesService} from "../services/courses.service";
 import {Course, sortCoursesBySeqNo} from "../models/course.model";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {CoursesCardListComponent} from "../courses-card-list/courses-card-list.component";
 import {MatDialog} from "@angular/material/dialog";
 import {MessagesService} from "../messages/messages.service";
-import {interval} from "rxjs";
+import {from, interval} from "rxjs";
 import {openEditCourseDialog} from "../edit-course-dialog/edit-course-dialog.component";
 import {AsyncPipe} from "@angular/common";
+import {MatTooltip} from "@angular/material/tooltip";
+import {toObservable, toSignal} from "@angular/core/rxjs-interop";
 
 @Component({
   selector: 'home',
@@ -17,6 +19,7 @@ import {AsyncPipe} from "@angular/common";
     MatTab,
     CoursesCardListComponent,
     AsyncPipe,
+    MatTooltip,
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
@@ -24,10 +27,9 @@ import {AsyncPipe} from "@angular/common";
 export class HomeComponent implements OnInit {
 
   counter = 0;
-
   intervalCounter = signal(0);
-
   counter$ = interval(1000);
+  injector = inject(Injector);
 
   ngOnInit() {
     setInterval(() => {
@@ -60,10 +62,24 @@ export class HomeComponent implements OnInit {
 
   messageService = inject(MessagesService);
 
+  // @ts-ignore
+  beginnersList = viewChild<CoursesCardListComponent>('beginnersList');
+
+  // test
+  courses$ = toObservable(this.#courses);
+
   constructor() {
+    this.courses$.subscribe(courses => {
+      console.log(`🔵 courses`, courses);
+    });
+
     effect(() => {
-      console.log(`Beginner courses: `, this.beginnerCourses())
-      console.log(`Advanced courses: `, this.advancedCourses())
+      // console.log(`🟢 beginnersList`, this.beginnersList);
+    });
+
+    effect(() => {
+      // console.log(`Beginner courses: `, this.beginnerCourses())
+      // console.log(`Advanced courses: `, this.advancedCourses())
     });
 
     this.loadCourses()
@@ -123,4 +139,34 @@ export class HomeComponent implements OnInit {
   }
 
 
+  onToObservableExample() {
+    const number = signal(0);
+    number.set(1);
+    const numbers$ = toObservable(number, {
+      injector: this.injector
+    });
+    number.set(2);
+
+    numbers$.subscribe(value => {
+      console.log(`🟢 number:`, value);
+    });
+
+    number.set(3);
+    number.set(4);
+  }
+
+  toSignalExample() {
+    const courses$ = from(this.coursesService.loadAllCourses());
+
+    const courses = toSignal(courses$, {
+      injector: this.injector
+    });
+
+    effect(() => {
+      console.log(`🔵 courses`, courses());
+    }, {
+      injector: this.injector
+    });
+
+  }
 }
